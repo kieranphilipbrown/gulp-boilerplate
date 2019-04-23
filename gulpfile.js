@@ -1,84 +1,67 @@
-const gulp = require('gulp');
-const imagemin = require('gulp-imagemin');
-const uglify = require('gulp-uglify');
-const sass = require('gulp-sass');
-const concat = require('gulp-concat');
-const watch = require('gulp-watch');
-const browserSync = require('browser-sync').create(); //https://browsersync.io/docs/gulp#page-top
+const gulp = require("gulp");
+const { parallel, series } = require("gulp");
+
+const imagemin = require("gulp-imagemin");
+const uglify = require("gulp-uglify");
+const sass = require("gulp-sass");
+const concat = require("gulp-concat");
+const watch = require("gulp-watch");
+const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const reload = browserSync.reload;
 
-/*
-TOP LEVEL FUNCTIONS
-    gulp.task = Define tasks
-    gulp.src = Point to files to use
-    gulp.dest = Points to the folder to output
-    gulp.watch = Watch files and folders for changes
-*/
-
-// Useful Logs message
-// Type 'gulp message' in the terminal and it should output the task message
-gulp.task('message', function() {
-    return console.log("Gulp is running...");
-});
+// /*
+// TOP LEVEL FUNCTIONS
+//     gulp.task = Define tasks
+//     gulp.src = Point to files to use
+//     gulp.dest = Points to the folder to output
+//     gulp.watch = Watch files and folders for changes
+// */
 
 // Optimise Images
-gulp.task('imageMin', () =>
-    gulp.src('src/images/*')
+function imageMin(callback) {
+    gulp.src("src/images/*")
         .pipe(imagemin())
-        .pipe(gulp.dest('dist/images'))
-);
+        .pipe(gulp.dest("dist/images"));
+    callback();
+}
 
 // Copy all HTML files to Dist
-// To run this task use 'gulp copyHtml'
-gulp.task('copyHtml', function() {
-    gulp.src('src/*.html')
-        .pipe(gulp.dest('dist'));
-});
-
-// Minify JS
-gulp.task('minify', function() {
-    gulp.src('src/js/*.js')
-        .pipe(uglify())
-        .pipe(gulp.dest('dist/js'))
-});
+function copyHTML(callback) {
+    gulp.src("src/*.html").pipe(gulp.dest("dist"));
+    callback();
+}
 
 // Scripts
-gulp.task('scripts', function() {
-    gulp.src('src/js/*js')
-        .pipe(concat('main.js'))
+function js(callback) {
+    gulp.src("src/js/*js")
+        .pipe(concat("main.js"))
         .pipe(uglify())
-        .pipe(gulp.dest('dist/js'))
-});
+        .pipe(gulp.dest("dist/js"));
+    callback();
+}
 
 // Compile Sass
-gulp.task('sass', function() {
-    gulp.src('src/sass/*.scss')
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(gulp.dest('dist/css'));
-});
+function css(callback) {
+    gulp.src("src/sass/*.scss")
+        .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
+        .pipe(gulp.dest("dist/css"));
+    callback();
+}
 
-// Watch files for chanegs
-gulp.task('watch', function() {
-    gulp.watch('src/sass/**/*.scss', ['sass'])
-});
+function watch_files() {
+    gulp.watch(cssWatch, css);
+    gulp.watch(jsWatch, gulp.series(js, reload));
+}
 
-// Livereload
-gulp.task('serve', function () {
-
+// Browser Sync
+function browser_sync(callback) {
     // Serve files from the root of this project
     browserSync.init({
         server: {
             baseDir: "dist/"
         }
     });
+    callback();
+}
 
-    gulp.watch('src/sass/**/*.scss', ['sass']).on('change', reload);
-    gulp.watch('src/js/*.js', ['scripts']).on('change', reload);
-    gulp.watch('src/*.html', ['copyHtml']).on('change', reload);
-});
-
-// Do all the tasks and run with the default command - 'gulp'
-gulp.task('default', ['imageMin', 'copyHtml', 'sass', 'scripts', 'serve'])
-
-// This is just another example of how to run each of the tasks with the default gulp command
-//gulp.task('default', ['message', 'imageMin', 'sass', 'copyHtml', 'scripts', 'watch'])
+exports.default = parallel(copyHTML, css, js, imageMin, browser_sync);

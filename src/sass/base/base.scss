@@ -13,17 +13,16 @@ html {
 }
 
 * {
-
     &,
     &:before,
     &:after {
-      box-sizing: inherit;
+        box-sizing: inherit;
     }
-
 }
 
 body {
     align-items: stretch;
+    background: orange;
     display: block;
     display: flex;
     flex-direction: column;
