@@ -1,6 +1,6 @@
-## 🥤Gulp Boilerplate
+## 🥤Gulp Boilerplate (4)
 
-A basic Gulp boilerplate to get developing locally with a few helpful tools already set up.
+A basic Gulp 4 boilerplate to get developing locally with a few helpful tools already set up.
 
 Tasks included:
 
