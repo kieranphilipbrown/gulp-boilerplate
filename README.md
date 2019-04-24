@@ -21,3 +21,9 @@ Run Gulp.
     gulp
 
 The live reload task should then initiate the project on http://localhost:3000. If that port is already taken it will default to another number such as localhost:3001.
+
+## Building assets
+
+To build assets without starting a local server with live reload, use the build command:
+
+    gulp build
