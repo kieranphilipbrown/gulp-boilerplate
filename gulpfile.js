@@ -60,16 +60,6 @@ function watch_files() {
     gulp.watch("src/*.html", copyHTML).on("change", browserSync.reload);
 }
 
-// Browser Sync
-function browser_sync() {
-    // Serve files from the root of this project
-    browserSync.init({
-        server: {
-            baseDir: "dist/"
-        }
-    });
-}
-
 // Default 'gulp' command with start local server and watch files for changes.
 exports.default = series(copyHTML, css, js, imageMin, watch_files);
 
