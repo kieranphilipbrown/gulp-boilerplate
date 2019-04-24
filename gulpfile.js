@@ -5,7 +5,6 @@ const imagemin = require("gulp-imagemin");
 const uglify = require("gulp-uglify");
 const sass = require("gulp-sass");
 const concat = require("gulp-concat");
-const watch = require("gulp-watch");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const reload = browserSync.reload;
 
@@ -18,50 +17,61 @@ const reload = browserSync.reload;
 // */
 
 // Optimise Images
-function imageMin(callback) {
+function imageMin(cb) {
     gulp.src("src/images/*")
         .pipe(imagemin())
         .pipe(gulp.dest("dist/images"));
-    callback();
+    cb();
 }
 
 // Copy all HTML files to Dist
-function copyHTML(callback) {
+function copyHTML(cb) {
     gulp.src("src/*.html").pipe(gulp.dest("dist"));
-    callback();
+    cb();
 }
 
 // Scripts
-function js(callback) {
+function js(cb) {
     gulp.src("src/js/*js")
         .pipe(concat("main.js"))
         .pipe(uglify())
         .pipe(gulp.dest("dist/js"));
-    callback();
+    cb();
 }
 
 // Compile Sass
-function css(callback) {
+function css(cb) {
     gulp.src("src/sass/*.scss")
         .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
-        .pipe(gulp.dest("dist/css"));
-    callback();
+        .pipe(gulp.dest("dist/css"))
+        // Stream changes to all browsers
+        .pipe(browserSync.stream());
+    cb();
 }
 
 function watch_files() {
-    gulp.watch(cssWatch, css);
-    gulp.watch(jsWatch, gulp.series(js, reload));
+    browserSync.init({
+        server: {
+            baseDir: "dist/"
+        }
+    });
+    gulp.watch("src/sass/**/*.scss", css);
+    gulp.watch("src/js/*.js", js).on("change", browserSync.reload);
+    gulp.watch("src/*.html", copyHTML).on("change", browserSync.reload);
 }
 
 // Browser Sync
-function browser_sync(callback) {
+function browser_sync() {
     // Serve files from the root of this project
     browserSync.init({
         server: {
             baseDir: "dist/"
         }
     });
-    callback();
 }
 
-exports.default = parallel(copyHTML, css, js, imageMin, browser_sync);
+// Default 'gulp' command with start local server and watch files for changes.
+exports.default = series(copyHTML, css, js, imageMin, watch_files);
+
+// 'gulp build' will build all assets but not run on a local server.
+exports.build = parallel(copyHTML, css, js, imageMin);
