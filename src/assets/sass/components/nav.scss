@@ -1,0 +1,26 @@
+/*------------------*
+# Nav
+*------------------*/
+
+nav {
+    background: #333;
+    border-bottom-right-radius: 5px;
+    left: 0;
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li a {
+        color: #f9f9f9;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
