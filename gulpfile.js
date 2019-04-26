@@ -7,6 +7,7 @@ const uglify = require("gulp-uglify");
 const sass = require("gulp-sass");
 const concat = require("gulp-concat");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
+const nunjucksRender = require("gulp-nunjucks-render");
 const reload = browserSync.reload;
 
 // /*
@@ -31,6 +32,7 @@ function copyHTML(cb) {
     cb();
 }
 
+// Minify HTML
 function minifyHTML(cb) {
     gulp.src("src/*.html")
         .pipe(gulp.dest("dist"))
@@ -62,6 +64,35 @@ function css(cb) {
     cb();
 }
 
+// Process Nunjucks
+function nunjucks(cb) {
+    gulp.src("src/pages/*.html")
+        .pipe(
+            nunjucksRender({
+                path: ["src/templates/"] // String or Array
+            })
+        )
+        .pipe(gulp.dest("dist"));
+    cb();
+}
+
+function nunjucksMinify(cb) {
+    gulp.src("src/pages/*.html")
+        .pipe(
+            nunjucksRender({
+                path: ["src/templates/"] // String or Array
+            })
+        )
+        .pipe(
+            htmlmin({
+                collapseWhitespace: true
+            })
+        )
+        .pipe(gulp.dest("dist"));
+    cb();
+}
+
+// Watch Files
 function watch_files() {
     browserSync.init({
         server: {
@@ -70,11 +101,15 @@ function watch_files() {
     });
     gulp.watch("src/sass/**/*.scss", css);
     gulp.watch("src/js/*.js", js).on("change", browserSync.reload);
-    gulp.watch("src/*.html", copyHTML).on("change", browserSync.reload);
+    gulp.watch("src/pages/*.html", nunjucks).on("change", browserSync.reload);
+    gulp.watch("src/templates/*.html", nunjucks).on(
+        "change",
+        browserSync.reload
+    );
 }
 
 // Default 'gulp' command with start local server and watch files for changes.
-exports.default = series(copyHTML, css, js, imageMin, watch_files);
+exports.default = series(nunjucks, css, js, imageMin, watch_files);
 
 // 'gulp build' will build all assets but not run on a local server.
-exports.build = parallel(minifyHTML, css, js, imageMin);
+exports.build = parallel(nunjucksMinify, css, js, imageMin);

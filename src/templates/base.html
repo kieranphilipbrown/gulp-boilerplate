@@ -9,15 +9,10 @@
         <link rel="stylesheet" href="css/app.css" />
     </head>
     <body>
-        <div class="main-content">
-            <div class="page-width">
-                <h1>🥤Gulp Boilerplate</h1>
-                <p>
-                    A basic Gulp boilerplate to get developing locally with a
-                    few helpful tools already set up.
-                </p>
-            </div>
-        </div>
+
+        {% include "nav.html" %}
+
+        {% block content %}{% endblock %}
 
         <script src="js/main.js"></script>
     </body>
