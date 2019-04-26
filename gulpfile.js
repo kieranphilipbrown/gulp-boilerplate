@@ -20,7 +20,7 @@ const reload = browserSync.reload;
 
 // Optimise Images
 function imageMin(cb) {
-    gulp.src("src/images/*")
+    gulp.src("src/assets/images/*")
         .pipe(imagemin())
         .pipe(gulp.dest("dist/images"));
     cb();
@@ -47,7 +47,7 @@ function minifyHTML(cb) {
 
 // Scripts
 function js(cb) {
-    gulp.src("src/js/*js")
+    gulp.src("src/assets/js/*js")
         .pipe(concat("main.js"))
         .pipe(uglify())
         .pipe(gulp.dest("dist/js"));
@@ -56,7 +56,7 @@ function js(cb) {
 
 // Compile Sass
 function css(cb) {
-    gulp.src("src/sass/*.scss")
+    gulp.src("src/assets/sass/*.scss")
         .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
         .pipe(gulp.dest("dist/css"))
         // Stream changes to all browsers
@@ -99,8 +99,8 @@ function watch_files() {
             baseDir: "dist/"
         }
     });
-    gulp.watch("src/sass/**/*.scss", css);
-    gulp.watch("src/js/*.js", js).on("change", browserSync.reload);
+    gulp.watch("src/assets/sass/**/*.scss", css);
+    gulp.watch("src/assets/js/*.js", js).on("change", browserSync.reload);
     gulp.watch("src/pages/*.html", nunjucks).on("change", browserSync.reload);
     gulp.watch("src/templates/*.html", nunjucks).on(
         "change",
