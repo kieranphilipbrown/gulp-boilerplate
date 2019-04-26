@@ -8,7 +8,6 @@ const sass = require("gulp-sass");
 const concat = require("gulp-concat");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const nunjucksRender = require("gulp-nunjucks-render");
-const reload = browserSync.reload;
 
 // /*
 // TOP LEVEL FUNCTIONS
