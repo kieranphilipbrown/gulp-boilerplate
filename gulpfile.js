@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const { parallel, series } = require("gulp");
 
 const imagemin = require("gulp-imagemin");
+const htmlmin = require("gulp-htmlmin");
 const uglify = require("gulp-uglify");
 const sass = require("gulp-sass");
 const concat = require("gulp-concat");
@@ -27,6 +28,18 @@ function imageMin(cb) {
 // Copy all HTML files to Dist
 function copyHTML(cb) {
     gulp.src("src/*.html").pipe(gulp.dest("dist"));
+    cb();
+}
+
+function minifyHTML(cb) {
+    gulp.src("src/*.html")
+        .pipe(gulp.dest("dist"))
+        .pipe(
+            htmlmin({
+                collapseWhitespace: true
+            })
+        )
+        .pipe(gulp.dest("dist"));
     cb();
 }
 
@@ -64,4 +77,4 @@ function watch_files() {
 exports.default = series(copyHTML, css, js, imageMin, watch_files);
 
 // 'gulp build' will build all assets but not run on a local server.
-exports.build = parallel(copyHTML, css, js, imageMin);
+exports.build = parallel(minifyHTML, css, js, imageMin);
