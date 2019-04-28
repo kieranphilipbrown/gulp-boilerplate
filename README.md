@@ -4,9 +4,11 @@ A basic Gulp 4 boilerplate to get developing locally with a few helpful tools al
 
 Tasks included:
 
+- HTML minify (on build)
 - Sass minify
 - JS minify
 - Image minify
+- Nunjucks
 - Live reload
 
 ## How to run
