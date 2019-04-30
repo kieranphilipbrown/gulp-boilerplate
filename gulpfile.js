@@ -8,6 +8,7 @@ const sass = require("gulp-sass");
 const concat = require("gulp-concat");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const nunjucksRender = require("gulp-nunjucks-render");
+const data = require("gulp-data");
 
 // /*
 // TOP LEVEL FUNCTIONS
@@ -67,6 +68,11 @@ function css(cb) {
 function nunjucks(cb) {
     gulp.src("src/pages/*.html")
         .pipe(
+            data(function() {
+                return require("./src/assets/data/data.json");
+            })
+        )
+        .pipe(
             nunjucksRender({
                 path: ["src/templates/"] // String or Array
             })
@@ -100,6 +106,10 @@ function watch_files() {
     });
     gulp.watch("src/assets/sass/**/*.scss", css);
     gulp.watch("src/assets/js/*.js", js).on("change", browserSync.reload);
+    gulp.watch("src/assets/data/*.json", nunjucks).on(
+        "change",
+        browserSync.reload
+    );
     gulp.watch("src/pages/*.html", nunjucks).on("change", browserSync.reload);
     gulp.watch("src/templates/*.html", nunjucks).on(
         "change",

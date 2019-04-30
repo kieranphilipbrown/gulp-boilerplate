@@ -4,6 +4,17 @@
 <div class="main-content">
     <div class="page-width">
         <h1>Page 2</h1>
+        <div class="grid">
+            {% for blog in blogs %}
+                <div class="card">
+                    <h1>{{ blog.title }}</h1>
+                    <span>{{ blog.author }}</span>
+                    <span>{{ blog.published_date }}</span>
+                    <p>{{ blog.subtitle }}</p>
+                    <p>{{ blog.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}
