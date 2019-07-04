@@ -5,6 +5,7 @@ A basic Gulp 4 boilerplate to get developing locally with a few helpful tools al
 Tasks included:
 
 - HTML minify (on build)
+- CSS autoprefixer
 - Sass minify
 - JS minify
 - Image minify
