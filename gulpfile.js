@@ -8,6 +8,7 @@ const sass = require("gulp-sass");
 const concat = require("gulp-concat");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const nunjucksRender = require("gulp-nunjucks-render");
+const autoprefixer = require('gulp-autoprefixer');
 
 // /*
 // TOP LEVEL FUNCTIONS
@@ -57,6 +58,10 @@ function js(cb) {
 function css(cb) {
     gulp.src("src/assets/sass/*.scss")
         .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
+        .pipe(autoprefixer({
+            browserlist: ['last 2 versions'],
+            cascade: false
+        }))
         .pipe(gulp.dest("dist/css"))
         // Stream changes to all browsers
         .pipe(browserSync.stream());
