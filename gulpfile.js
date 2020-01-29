@@ -9,6 +9,7 @@ const concat = require("gulp-concat");
 const browserSync = require("browser-sync").create(); //https://browsersync.io/docs/gulp#page-top
 const nunjucksRender = require("gulp-nunjucks-render");
 const autoprefixer = require('gulp-autoprefixer');
+const babel = require('gulp-babel');
 
 // /*
 // TOP LEVEL FUNCTIONS
@@ -48,6 +49,9 @@ function minifyHTML(cb) {
 // Scripts
 function js(cb) {
     gulp.src("src/assets/js/*js")
+        .pipe(babel({
+            presets: ['@babel/preset-env']
+        }))
         .pipe(concat("main.js"))
         .pipe(uglify())
         .pipe(gulp.dest("dist/js"));
