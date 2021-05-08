@@ -23,7 +23,7 @@
         "gulp-sass": "^4.1.0",
         "gulp-uglify": "^3.0.2",
         "gulp-watch": "^5.0.1",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.21",
         "lodash.mergewith": ">=4.6.2",
         "mixin-deep": "^2.0.1",
         "node-sass": "^4.14.1",
