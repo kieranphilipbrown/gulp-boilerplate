@@ -26,7 +26,7 @@
         "lodash": "^4.17.21",
         "lodash.mergewith": ">=4.6.2",
         "mixin-deep": "^2.0.1",
-        "node-sass": "^6.0.1",
+        "node-sass": "^7.0.0",
         "sass": "^1.35.1",
         "set-value": "^4.0.1"
     }
